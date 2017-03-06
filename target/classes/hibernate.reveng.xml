@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="ecomm" match-name="Customer"/>
+  <table-filter match-catalog="ecomm" match-name="Inventory"/>
+  <table-filter match-catalog="ecomm" match-name="Part"/>
+  <table-filter match-catalog="ecomm" match-name="Sale"/>
+  <table-filter match-catalog="ecomm" match-name="Tax"/>
+  <table-filter match-catalog="ecomm" match-name="Vendor"/>
+  <table-filter match-catalog="ecomm" match-name="language"/>
+</hibernate-reverse-engineering>
