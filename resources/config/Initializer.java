@@ -1,4 +1,4 @@
-package com.jarana.config;
+package MyPaCkAgE.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
