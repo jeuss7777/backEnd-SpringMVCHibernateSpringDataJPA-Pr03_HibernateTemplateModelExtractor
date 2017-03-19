@@ -1,4 +1,4 @@
-package com.jarana.config;
+package MyPaCkAgE.config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,13 +36,12 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-//import com.jarana.serializer.DateDeserializer;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.jarana")
+@ComponentScan("MyPaCkAgE")
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories("com.jarana.repository")
+@EnableJpaRepositories("MyPaCkAgE.repository")
 public class WebAppConfig extends WebMvcConfigurationSupport {
 
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
@@ -140,11 +139,6 @@ public class WebAppConfig extends WebMvcConfigurationSupport {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new Hibernate4Module());
 		objectMapper.setDateFormat(dateFormat);
-//		
-//		SimpleModule module = new SimpleModule()
-//		        .addDeserializer(Date.class, new DateDeserializer());
-//		objectMapper.registerModule(module);
-		
 		return objectMapper;
 	}
 }
