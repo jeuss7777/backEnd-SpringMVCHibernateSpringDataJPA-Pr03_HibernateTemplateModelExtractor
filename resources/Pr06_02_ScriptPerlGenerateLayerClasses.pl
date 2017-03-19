@@ -1,29 +1,45 @@
 use strict;
 use warnings;
 use Cwd;
+use File::Basename;
 
 sub main {
 
 	my $nameFile    = '';
 	my $lowerName   = '';
 	my $startDir = getcwd;
+	
+	#COMMENT
+	#$startDir = '/home/jarana/workspace/Pr03_MyTest/resources';
+	
 	print "startDir:".$startDir."\n";
 	
-	my $thePath ='/home/jarana/workspace/Pr22_Ex03/src/main/java/com/jarana/entities/entity';
+	my ($entityPath, $warFile) = @ARGV;
+	
+	if ( !(defined $warFile && length $warFile > 0)) {
+		# If not defined Entity Path ,use this for my testing
+    	$entityPath ='/home/jarana/workspace/Pr22_Ex03/src/main/java/com/jarana/entities/entity';
+	}
+	print "Path:" . $entityPath . "\n";
 
-	#my $thePath = $ARGV[0];
-	print "Path:" . $thePath . "\n";
-
+	#Obtaining Project Name
+	chdir("../");
+	my $rootD = getcwd;
+	my $projectDir = basename($rootD);
+	print "projectDir:".$projectDir, "\n";
+	
+	if ( !(defined $warFile && length $warFile > 0)) {
+    	$warFile = $projectDir
+	} 
+	
+	print "warFile:".$warFile."\n";
+	
 	#-- change dir to ../
-	chdir $thePath;
-	my $dummyfiles = $thePath."/dummy_*.txt";
-	unlink glob($dummyfiles);
-
-	#system("ls -l");
-	#exec("ls -l");
+	chdir $entityPath;
+	my $dummyfiles = $entityPath."/dummy_*.txt";
 
 	system("grep package *.java| head -1 > pack.txt");
-	my $pack_file = $thePath . "/pack.txt";
+	my $pack_file = $entityPath . "/pack.txt";
 
 	my $content;    # content of a file to a variable
 	open( my $fh, '<', $pack_file ) or die "cannot open file $pack_file";
@@ -55,9 +71,9 @@ sub main {
 	system("mkdir repository; mkdir service; mkdir controller; mkdir config");
 	print "DirBase:" . $dirBase . "\n";
 
-	chdir($thePath);
+	chdir($entityPath);
 
-	my @default_files   = glob "$thePath" . '/*';
+	my @default_files   = glob "$entityPath" . '/*';
 	my $file_to_iterate = '';
 	my $toFile          = '';
 	#my $dummyFile       = '';
@@ -75,7 +91,7 @@ sub main {
 		#chomp($file_to_iterate);
 		if ( -f $file_to_iterate ) {
 			print "+++++++++++++++++++++ Iteration ++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-			chdir($thePath);
+			chdir($entityPath);
 			print "Path:" . getcwd . "\n";
 			print "File:" . $file_to_iterate . "\n";
 			$nameFile = $file_to_iterate;
@@ -103,7 +119,7 @@ sub main {
 				system("echo '$typeValue' | cut -d'(' -f1 > '$toFile'");  # Get rid of text after (
 
 				#my $dumContent='';
-				my $dummyFile = $thePath . "/" . $toFile;
+				my $dummyFile = $entityPath . "/" . $toFile;
 				open( my $fh, '<', $dummyFile )
 				  or die "cannot open file $dummyFile";
 				{
@@ -302,9 +318,60 @@ sub main {
 	
 	unlink glob($dummyfiles);
 	
-	# copiar Config files
-	# pom
-	# replace project name in pom
+	# Go to resources directory ($startDir)
+	chdir($startDir);
+	
+	# update package names and copy Config files
+	`sed -i 's/com.learning/com.jarana/g' config/Initializer.java`;
+	`sed -i 's/com.learning/com.jarana/g' config/WebAppConfig.java`;
+	
+	#cd ../src/main/java/com/learning/config/
+	`cp config/Initializer.java ../src/main/java/com/learning/config/`;
+	`cp config/WebAppConfig.java ../src/main/java/com/learning/config/`;
+	
+	#  update package names and copy Config files
+	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/Initializer.java`;
+	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/WebAppConfig.java`;
+	
+	# cd ../src/main/java/com/learning/config/
+	`cp config/Initializer.java ../src/main/java/com/learning/config/`;
+	`cp config/WebAppConfig.java ../src/main/java/com/learning/config/`;
+	
+	# update pom.xml and copy
+	`sed -i 's/GrOuPID/'$PackBase'/g' config/pom.xml`;
+	`sed -i 's/PrOjEcTNAME/'$projectDir'/g' config/pom.xml`;
+	`sed -i 's/FiNaLNAME/'$warFile'/g' config/pom.xml`;
+	
+	`cp config/pom.xml ../`;
+	
+	# applications.properties
+	
+	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/application.properties`;
+	print "Please make sure, you setup the Password for your database connection\n";
+	
+	# if directory does not exists, create it
+	chdir("../src/main");
+	if (!-d "resources") {
+   		system("mkdir resources");
+	} else {
+		print "resources folder exists!\n";
+	}
+	
+	chdir($startDir);
+	print"myActualDir:".getcwd."\n";
+	`cp config/application.properties ../src/main/resources/`;
+	
+	print "NOTE.- Don't forget to set up JDBC Connction settings at\n";
+	print "src/main/resources/application.properties\n";
+	
+	
+	
+	#create jsp folder in WEB-INF
+	# from /home/jarana/workspace/Pr03_MyTest/src/main/webapp/WEB-INF, mkdir jsp
+	#cp index.jsp /home/jarana/workspace/Pr03_MyTest/src/main/webapp/WEB-INF/jsp
+	
+	# copy/paste jsp web page
+	
 	#  <groupId>GrOuPID</groupId>
 	#  <groupId>GrOuPID</groupId>
 	#  <finalName>FiNaLNAME</finalName>
