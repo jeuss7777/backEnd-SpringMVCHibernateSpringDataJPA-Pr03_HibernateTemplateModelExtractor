@@ -9,8 +9,9 @@ sub main {
 	my $lowerName   = '';
 	my $startDir = getcwd;
 	
-	#COMMENT
+	#COMMENT (Both lines - just for testing)
 	#$startDir = '/home/jarana/workspace/Pr03_MyTest/resources';
+	#chdir($startDir);
 	
 	print "startDir:".$startDir."\n";
 	
@@ -18,7 +19,7 @@ sub main {
 	
 	if ( !(defined $warFile && length $warFile > 0)) {
 		# If not defined Entity Path ,use this for my testing
-    	$entityPath ='/home/jarana/workspace/Pr22_Ex03/src/main/java/com/jarana/entities/entity';
+    	$entityPath ='/home/jarana/workspace/Pr03_MyTest/src/main/java/com/learning/entities';
 	}
 	print "Path:" . $entityPath . "\n";
 
@@ -69,7 +70,7 @@ sub main {
 
 	#Creating directories
 	system("mkdir repository; mkdir service; mkdir controller; mkdir config");
-	print "DirBase:" . $dirBase . "\n";
+	print "dirBase:" . $dirBase . "\n";
 
 	chdir($entityPath);
 
@@ -316,18 +317,23 @@ sub main {
 	print OUTPUT "\t}\n\n";
 	print OUTPUT "}\n\n";
 	
+	print "** ControllerFile:" . getcwd . "/" . $ContrHello . "\n\n";
+	
+	# Erasing dummy files
 	unlink glob($dummyfiles);
 	
 	# Go to resources directory ($startDir)
 	chdir($startDir);
 	
+	
 	#  update package names and copy Config files
+	print "Getting Config Files\n";
 	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/Initializer.java`;
 	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/WebAppConfig.java`;
 	
 	# cd ../src/main/java/com/learning/config/
-	`cp config/Initializer.java ../src/main/java/com/learning/config/`;
-	`cp config/WebAppConfig.java ../src/main/java/com/learning/config/`;
+	`cp config/Initializer.java '$dirBase'/config/`;
+	`cp config/WebAppConfig.java '$dirBase'/config/`;
 
 	
 	# update pom.xml and copy
@@ -341,22 +347,19 @@ sub main {
 	# applications.properties
 	
 	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/application.properties`;
-	print "Please make sure, you setup the Password for your database connection\n";
 	
 	# if directory does not exists, create it
 	chdir("../src/main");
 	if (!-d "resources") {
    		system("mkdir resources");
-	} else {
-		print "resources folder exists!\n";
-	}
+	} 
 	
 	chdir($startDir);
 	print"myActualDir:".getcwd."\n";
 	`cp config/application.properties ../src/main/resources/`;
 	
-	print "NOTE.- Don't forget to set up JDBC Connction settings at\n";
-	print "src/main/resources/application.properties\n";
+	print "\n*** NOTE.- Don't forget to set up JDBC DB Connection settings at\n";
+	print "    src/main/resources/application.properties\n\n";
 	
 	
 	
