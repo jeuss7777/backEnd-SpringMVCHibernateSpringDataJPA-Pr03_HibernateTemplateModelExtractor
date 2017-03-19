@@ -321,14 +321,6 @@ sub main {
 	# Go to resources directory ($startDir)
 	chdir($startDir);
 	
-	# update package names and copy Config files
-	`sed -i 's/com.learning/com.jarana/g' config/Initializer.java`;
-	`sed -i 's/com.learning/com.jarana/g' config/WebAppConfig.java`;
-	
-	#cd ../src/main/java/com/learning/config/
-	`cp config/Initializer.java ../src/main/java/com/learning/config/`;
-	`cp config/WebAppConfig.java ../src/main/java/com/learning/config/`;
-	
 	#  update package names and copy Config files
 	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/Initializer.java`;
 	`sed -i 's/MyPaCkAgE/'$PackBase'/g' config/WebAppConfig.java`;
@@ -336,6 +328,7 @@ sub main {
 	# cd ../src/main/java/com/learning/config/
 	`cp config/Initializer.java ../src/main/java/com/learning/config/`;
 	`cp config/WebAppConfig.java ../src/main/java/com/learning/config/`;
+
 	
 	# update pom.xml and copy
 	`sed -i 's/GrOuPID/'$PackBase'/g' config/pom.xml`;
@@ -343,6 +336,7 @@ sub main {
 	`sed -i 's/FiNaLNAME/'$warFile'/g' config/pom.xml`;
 	
 	`cp config/pom.xml ../`;
+	
 	
 	# applications.properties
 	
