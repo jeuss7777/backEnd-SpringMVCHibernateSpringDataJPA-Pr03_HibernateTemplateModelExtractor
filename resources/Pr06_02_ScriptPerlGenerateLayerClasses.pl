@@ -242,7 +242,7 @@ sub main {
 				print OUTPUT "import " . $entitPack . "." . $nameFile . ";\n";
 				print OUTPUT "import ". $PackBase. ".service.". $nameFile. "Service;\n\n";
 				print OUTPUT "\@Controller\n";
-				print OUTPUT "\@RequestMapping(\"\/" . $lowerName . "\")\n";
+				print OUTPUT "\@RequestMapping(\"\/" . lc($lowerName) . "\")\n";
 				print OUTPUT "public class " . $nameFile . "Controller { \n\n";
 				print OUTPUT "\t\@Autowired\n";
 				print OUTPUT "\tprivate ". $nameFile. "Service ". $lowerName. "Service;\n\n";
@@ -357,6 +357,9 @@ sub main {
 	chdir($startDir);
 	print"myActualDir:".getcwd."\n";
 	`cp config/application.properties ../src/main/resources/`;
+	
+	# Copying logback file
+	`cp config/logback.xml ../src/main/resources/`;
 	
 	print "\n*** NOTE.- Don't forget to set up JDBC DB Connection settings at\n";
 	print "    src/main/resources/application.properties\n\n";
